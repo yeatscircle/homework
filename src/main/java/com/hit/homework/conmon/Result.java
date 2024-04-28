@@ -1,4 +1,4 @@
-package com.itheima.pojo;
+package com.hit.homework.conmon;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

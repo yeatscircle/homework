@@ -1,4 +1,4 @@
-package com.hit.reggie.config;
+package com.hit.homework.config;
 
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
