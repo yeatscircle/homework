@@ -1,23 +1,23 @@
 package com.hit.homework.controller;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hit.homework.conmon.Result;
 import com.hit.homework.domain.Emp;
 import com.hit.homework.service.EmpService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
 
-
+@Tag(name = "员工信息指令操作")
 @Slf4j
 @RestController
 @RequestMapping("/emps")
@@ -25,21 +25,62 @@ import java.time.LocalDateTime;
 public class EmpController {
     final EmpService empService;
 
+    @Operation(summary = "分页查询所有员工数据")
     @GetMapping
-    public Result selectAll(String name, Integer gender, Integer page, @JsonFormat Integer pageSize, @JsonFormat LocalDateTime startTime, LocalDateTime endTime) {
+    public Result selectAll(String name, Short gender,
+                            @DateTimeFormat(pattern = "yyyy-mm-dd") LocalDate startTime,
+                            @DateTimeFormat(pattern = "yyyy-mm-dd") LocalDate endTime,
+                            @RequestParam(defaultValue = "1") Integer page,
+                            @RequestParam(defaultValue = "10") Integer pageSize) {
+        log.info("name={},gender={},page={},pageSize={},startTime={},endTime={}", name, gender, page, pageSize, startTime, endTime);
         // 分页构造器
-        Page<Emp> pageInfo = new Page<>();
+        Page<Emp> pageInfo = new Page<>(page, pageSize);
 
         //条件构造器
         LambdaQueryWrapper<Emp> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         //添加条件
         lambdaQueryWrapper.like(!StringUtils.isEmpty(name), Emp::getName, name);
-        lambdaQueryWrapper.eq(Emp::getGender, gender);
-        lambdaQueryWrapper.between(Emp::getCreateTime, startTime, endTime);
+        lambdaQueryWrapper.eq(!Objects.isNull(gender), Emp::getGender, gender);
+        lambdaQueryWrapper.between(Emp::getEntryDate, startTime, endTime);
 
         //执行操作
         empService.page(pageInfo, lambdaQueryWrapper);
 
         return Result.success(pageInfo);
     }
+
+    @Operation(summary = "批量删除操作")
+    @DeleteMapping("/{ids}")
+    public Result deleteEmp(@PathVariable List<Long> ids){
+        if (empService.removeByIds(ids))
+            return Result.success();
+        return Result.error("删除失败");
+    }
+
+    @Operation(summary = "添加员工信息")
+    @PostMapping
+    public Result addEmp(@RequestBody Emp emp){
+        if (empService.save(emp))
+            return Result.success();
+        return  Result.error("添加失败");
+    }
+
+    @Operation(summary = "根据id查询员工信息")
+    @GetMapping("/{id}")
+    public Result getEmp(@PathVariable Integer id){
+        Emp emp = empService.getById(id);
+        return Result.success(emp);
+    }
+
+    @Operation(summary = "更新员工信息")
+    @PutMapping
+    public Result updateEmp(@RequestBody Emp emp){
+        if (empService.updateById(emp))
+            return Result.success();
+        return Result.error("更新失败");
+    }
+
+
+
+
 }
