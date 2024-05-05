@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,11 +29,11 @@ public class EmpController {
     @Operation(summary = "分页查询所有员工数据")
     @GetMapping
     public Result selectAll(String name, Short gender,
-                            @DateTimeFormat(pattern = "yyyy-mm-dd") LocalDate startTime,
-                            @DateTimeFormat(pattern = "yyyy-mm-dd") LocalDate endTime,
+                            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+                            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end,
                             @RequestParam(defaultValue = "1") Integer page,
                             @RequestParam(defaultValue = "10") Integer pageSize) {
-        log.info("name={},gender={},page={},pageSize={},startTime={},endTime={}", name, gender, page, pageSize, startTime, endTime);
+        log.info("name={},gender={},page={},pageSize={},startTime={},endTime={}", name, gender, page, pageSize, begin, end);
         // 分页构造器
         Page<Emp> pageInfo = new Page<>(page, pageSize);
 
@@ -41,7 +42,7 @@ public class EmpController {
         //添加条件
         lambdaQueryWrapper.like(!StringUtils.isEmpty(name), Emp::getName, name);
         lambdaQueryWrapper.eq(!Objects.isNull(gender), Emp::getGender, gender);
-        lambdaQueryWrapper.between(Emp::getEntryDate, startTime, endTime);
+        lambdaQueryWrapper.between(!Objects.isNull(begin)&&!Objects.isNull(end),Emp::getEntrydate, begin, end);
 
         //执行操作
         empService.page(pageInfo, lambdaQueryWrapper);
@@ -67,7 +68,7 @@ public class EmpController {
 
     @Operation(summary = "根据id查询员工信息")
     @GetMapping("/{id}")
-    public Result getEmp(@PathVariable Integer id){
+    public Result getEmp(@PathVariable Long id){
         Emp emp = empService.getById(id);
         return Result.success(emp);
     }

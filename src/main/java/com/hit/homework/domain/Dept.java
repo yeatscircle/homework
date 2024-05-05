@@ -5,11 +5,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 public class Dept {
-    private Integer id; //ID
+    private Long id; //ID
     private String name; //部门名称
 
     @TableField(fill = FieldFill.INSERT)

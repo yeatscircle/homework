@@ -20,6 +20,7 @@ mybatis-plus:
   global-config:
     db-config:
       update-strategy: not_null
+      id-type: assign_id
 
 # springdoc-openapi项目配置
 springdoc:
