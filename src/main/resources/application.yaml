@@ -40,12 +40,7 @@ knife4j:
   setting:
     language: zh_cn
 
-aliyun:
-  occ:
-    endpoint: https://oss-cn-beijing.aliyuncs.com
-    accessKeyId: LTAI5tL6p7EpPwmsJXakyCgy
-    accessKeySecret: 2bhM2lXSGeX7mBDXMLDaRrAgGI4ru1
-    bucketName: just-test1
+
 
 #spring
 logging:
