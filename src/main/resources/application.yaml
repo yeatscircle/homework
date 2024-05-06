@@ -40,7 +40,12 @@ knife4j:
   setting:
     language: zh_cn
 
-
+aliyun:
+  occ:
+    endpoint: https://oss-cn-beijing.aliyuncs.com
+    accessKeyId: LTAI5tLxZCwXC5gpp5vrTjd2
+    accessKeySecret: cbNYU8M9nQ7ShyHjONEmFb1DAG3LHu
+    bucketName: eterblue-01
 
 #spring
 logging:

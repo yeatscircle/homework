@@ -15,7 +15,7 @@ public class Emp {
     private Short gender;
     private String image;
     private LocalDate entrydate;
-    private Short deptId;
+    private Long deptId;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDate createTime;
