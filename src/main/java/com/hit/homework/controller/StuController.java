@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hit.homework.conmon.Result;
 
-import com.hit.homework.domain.Emp;
 import com.hit.homework.domain.Students;
 import com.hit.homework.service.StuService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -53,7 +52,7 @@ public class StuController {
 
     @Operation(summary = "批量删除操作")
     @DeleteMapping("/{ids}")
-    public Result deleteEmp(@PathVariable List<Long> ids){
+    public Result deleteStu(@PathVariable List<Long> ids){
         if (stuService.removeByIds(ids))
             return Result.success();
         return Result.error("删除失败");
@@ -61,7 +60,7 @@ public class StuController {
 
     @Operation(summary = "添加学生信息")
     @PostMapping
-    public Result addEmp(@RequestBody Students stu){
+    public Result addStu(@RequestBody Students stu){
         log.info("stu={}", stu);
         if (stuService.save(stu))
             return Result.success();
@@ -70,14 +69,14 @@ public class StuController {
 
     @Operation(summary = "根据id查询学生信息")
     @GetMapping("/{id}")
-    public Result getEmp(@PathVariable Long id){
+    public Result getStu(@PathVariable Long id){
         Students stu = stuService.getById(id);
         return Result.success(stu);
     }
 
     @Operation(summary = "更新学生信息")
     @PutMapping
-    public Result updateEmp(@RequestBody Students stu){
+    public Result updateStu(@RequestBody Students stu){
         if (stuService.updateById(stu))
             return Result.success();
         return Result.error("更新失败");
