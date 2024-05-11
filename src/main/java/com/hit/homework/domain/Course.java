@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 
 import lombok.Data;
@@ -46,7 +47,7 @@ public class Course implements Serializable {
     /**
      * 课程时间
      */
-    private Date timePeriod;
+    private LocalTime timePeriod;
 
     /**
      * 上课教室

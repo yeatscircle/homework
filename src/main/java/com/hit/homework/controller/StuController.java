@@ -28,12 +28,12 @@ public class StuController {
 
     @Operation(summary = "分页查询所有学生数据")
     @GetMapping
-    public Result selectAll(String name, Short gender,
+    public Result selectAll(String name, Short gender,Long cla,
                             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
                             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end,
                             @RequestParam(defaultValue = "1") Integer page,
                             @RequestParam(defaultValue = "10") Integer pageSize) {
-        log.info("name={},gender={},page={},pageSize={},startTime={},endTime={}", name, gender, page, pageSize, begin, end);
+        log.info("name={},gender={},cla={},page={},pageSize={},startTime={},endTime={}", name, gender,cla, page, pageSize, begin, end);
         // 分页构造器
         Page<Students> pageInfo = new Page<>(page, pageSize);
 
@@ -41,8 +41,9 @@ public class StuController {
         LambdaQueryWrapper<Students> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         //添加条件
         lambdaQueryWrapper.like(!StringUtils.isEmpty(name), Students::getName, name);
+        lambdaQueryWrapper.eq(!Objects.isNull(cla), Students::getClassId, cla);
         lambdaQueryWrapper.eq(!Objects.isNull(gender), Students::getGender, gender);
-        lambdaQueryWrapper.between(!Objects.isNull(begin)&&!Objects.isNull(end),Students::getCreateTime, begin, end);
+        lambdaQueryWrapper.between(!Objects.isNull(begin) && !Objects.isNull(end), Students::getCreateTime, begin, end);
 
         //执行操作
         stuService.page(pageInfo, lambdaQueryWrapper);
@@ -52,7 +53,7 @@ public class StuController {
 
     @Operation(summary = "批量删除操作")
     @DeleteMapping("/{ids}")
-    public Result deleteStu(@PathVariable List<Long> ids){
+    public Result deleteStu(@PathVariable List<Long> ids) {
         if (stuService.removeByIds(ids))
             return Result.success();
         return Result.error("删除失败");
@@ -60,29 +61,25 @@ public class StuController {
 
     @Operation(summary = "添加学生信息")
     @PostMapping
-    public Result addStu(@RequestBody Students stu){
+    public Result addStu(@RequestBody Students stu) {
         log.info("stu={}", stu);
-        if (stuService.save(stu))
+        if (stuService.saveAndCla(stu))
             return Result.success();
-        return  Result.error("添加失败");
+        return Result.error("添加失败");
     }
 
     @Operation(summary = "根据id查询学生信息")
     @GetMapping("/{id}")
-    public Result getStu(@PathVariable Long id){
+    public Result getStu(@PathVariable Long id) {
         Students stu = stuService.getById(id);
         return Result.success(stu);
     }
 
     @Operation(summary = "更新学生信息")
     @PutMapping
-    public Result updateStu(@RequestBody Students stu){
-        if (stuService.updateById(stu))
+    public Result updateStu(@RequestBody Students stu) {
+        if (stuService.checkInfo(stu))
             return Result.success();
         return Result.error("更新失败");
     }
-
-
-
-
 }

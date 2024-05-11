@@ -44,19 +44,19 @@ public class LoginController {
         wrapper.eq(User::getUsername, user.getUsername());
         User u = userService.getOne(wrapper);
 
-        log.info("emp:{}",u);
+        log.info("emp:{}", u);
         //显示查询结果
-        if (u==null)
+        if (u == null)
             return Result.error("用户不存在");
 
         //对比密码
-        if(!u.getPassword().equals(password))
+        if (!u.getPassword().equals(password))
             return Result.error("密码错误");
 
         //登录成功
         Map<String, Object> claims = new HashMap<>();
-        claims.put("id",u.getId());
-        claims.put("username",u.getUsername());
+        claims.put("id", u.getId());
+        claims.put("username", u.getUsername());
         String jwt = JwtUtils.generateJwt(claims);
         return Result.success(jwt);
     }

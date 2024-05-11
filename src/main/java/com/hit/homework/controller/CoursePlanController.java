@@ -6,7 +6,6 @@ import com.hit.homework.conmon.Result;
 import com.hit.homework.domain.Course;
 import com.hit.homework.domain.CoursePlanDto;
 import com.hit.homework.domain.CourseRelationship;
-import com.hit.homework.domain.Emp;
 import com.hit.homework.service.CourseService;
 import com.hit.homework.service.CourseRelationshipService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,11 +33,9 @@ public class CoursePlanController {
     @Operation(summary = "分页查询所有课程数据")
     @GetMapping
     public Result selectAll(String name, String serial_number, Integer week,
-                            @DateTimeFormat(pattern = "HH:MM") LocalTime begin,
-                            @DateTimeFormat(pattern = "HH:MM") LocalTime end,
                             @RequestParam(defaultValue = "1") Integer page,
                             @RequestParam(defaultValue = "10") Integer pageSize) {
-        log.info("name={},gender={},week={},page={},pageSize={},startTime={},endTime={}", name, serial_number, week, page, pageSize, begin, end);
+        log.info("name={},gender={},week={},page={},pageSize={}", name, serial_number, week, page, pageSize);
 
         //条件构造器
         LambdaQueryWrapper<Course> lambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -46,8 +43,6 @@ public class CoursePlanController {
         lambdaQueryWrapper.like(!StringUtils.isEmpty(name), Course::getName, name);
         lambdaQueryWrapper.eq(!StringUtils.isEmpty(serial_number), Course::getSerialNumber, serial_number);
         lambdaQueryWrapper.eq(!Objects.isNull(week), Course::getWeek, week);
-        lambdaQueryWrapper.between(!Objects.isNull(begin) && !Objects.isNull(end), Course::getTimePeriod, begin, end);
-
 
         List<Course> records = courseService.list(lambdaQueryWrapper);
         List<CoursePlanDto> list = new ArrayList<>();

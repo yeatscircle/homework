@@ -52,9 +52,9 @@ public class EmpController {
     @Operation(summary = "批量删除操作")
     @DeleteMapping("/{ids}")
     public Result deleteEmp(@PathVariable List<Long> ids){
-        if (empService.removeByIds(ids))
+        if (empService.checkInfo(ids))
             return Result.success();
-        return Result.error("删除失败");
+        return Result.error("存在职工任课现象,无法删除");
     }
 
     @Operation(summary = "添加员工信息")
@@ -80,7 +80,9 @@ public class EmpController {
         return Result.error("更新失败");
     }
 
-
-
-
+    @Operation(summary = "得到所有信息")
+    @GetMapping("/all")
+    public Result getAllEmp(){
+        return Result.success(empService.list());
+    }
 }
