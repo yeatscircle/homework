@@ -85,4 +85,16 @@ public class EmpController {
     public Result getAllEmp(){
         return Result.success(empService.list());
     }
+
+    @Operation(summary = "返回统计性别信息")
+    @GetMapping("/Repo")
+    public Result getRep() {
+        return Result.success(empService.getGenderInfo());
+    }
+
+    @Operation(summary = "返回统计部门信息")
+    @GetMapping("/Rep")
+    public Result getRepo() {
+        return Result.success(empService.getDeptInfo());
+    }
 }

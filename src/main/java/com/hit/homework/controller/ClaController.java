@@ -72,4 +72,11 @@ public class ClaController {
             return Result.success();
         return Result.error("更新失败");
     }
+
+
+    @Operation(summary = "返回统计班级信息")
+    @GetMapping("/Rep")
+    public Result getRep() {
+        return Result.success(classesService.list());
+    }
 }

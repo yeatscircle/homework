@@ -59,4 +59,5 @@ public class DeptController {
             return Result.success();
         return Result.error("更新失败");
     }
+
 }
