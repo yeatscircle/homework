@@ -71,4 +71,16 @@ public class StuServiceImpl extends ServiceImpl<StuMapper, Students> implements 
         genderCounts.add(gFemale);
         return genderCounts;
     }
+
+    @Override
+    public boolean removeAndCla(List<Long> ids) {
+        for (Long id : ids) {
+            Students stu = this.getById(id);
+            this.removeById(id);
+            Classes cla = classesService.getById(stu.getClassId());
+            cla.setNumber(cla.getNumber() - 1);
+            classesService.updateById(cla);
+        }
+        return true;
+    }
 }

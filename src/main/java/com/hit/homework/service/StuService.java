@@ -21,4 +21,6 @@ public interface StuService extends IService<Students> {
     boolean checkInfo(Students stu);
 
     List<GenderCount> getGenderInfo();
+
+    boolean removeAndCla(List<Long> ids);
 }

@@ -28,6 +28,13 @@ public class FilterAction implements Filter {
             return;
         }
 
+        // 仅用于swagger文档
+        if(url.contains("doc.html")){
+            //登录与注册请求,直接放行
+            filterChain.doFilter(servletRequest,servletResponse);
+            return;
+        }
+
         //3.获取请求头中的令牌--密钥
         String jwt = request.getHeader("token");
         //postman测试应该放在header里面

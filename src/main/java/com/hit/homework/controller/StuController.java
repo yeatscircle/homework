@@ -28,6 +28,15 @@ import java.util.*;
 public class StuController {
     final private StuService stuService;
 
+    @Operation(summary = "批量删除操作")
+    @DeleteMapping("/{ids}")
+    public Result deleteStu(@PathVariable List<Long> ids) {
+        if (stuService.removeAndCla(ids)) {
+            return Result.success();
+        }
+        return Result.error("删除失败");
+    }
+
     @Operation(summary = "分页查询所有学生数据")
     @GetMapping
     public Result selectAll(String name, Short gender, Long cla,
@@ -51,14 +60,6 @@ public class StuController {
         stuService.page(pageInfo, lambdaQueryWrapper);
 
         return Result.success(pageInfo);
-    }
-
-    @Operation(summary = "批量删除操作")
-    @DeleteMapping("/{ids}")
-    public Result deleteStu(@PathVariable List<Long> ids) {
-        if (stuService.removeByIds(ids))
-            return Result.success();
-        return Result.error("删除失败");
     }
 
     @Operation(summary = "添加学生信息")
